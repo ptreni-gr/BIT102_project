@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Discounts</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <style>
+        .container { margin-top: 20px; }
+        .discount-form { margin-bottom: 20px; }
+        .discount-item { margin-bottom: 10px; }
+        .error-message { color: red; display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Manage Discounts</h2>
+        
+        <!-- Add Discount Form -->
+        <div class="discount-form">
+            <h4>Add New Discount</h4>
+            <form id="discountForm">
+                <div class="form-group">
+                    <label for="productTitle">Product</label>
+                    <select id="productTitle" name="productTitle" class="form-control" required>
+                        <option value="" disabled selected>Select a product</option>
+                        <option value="Creamy Coffee">Creamy Coffee</option>
+                        <option value="Signature Mis2u Latte">Signature Mis2u Latte</option>
+                        <option value="Black Coffee">Black Coffee</option>
+                        <option value="Ice Latte">Ice Latte</option>
+                        <option value="Iced Matcha Latte">Iced Matcha Latte</option>
+                        <option value="Iced Pission Tea">Iced Pission Tea</option>
+                        <option value="Grape Soda">Grape Soda</option>
+                        <option value="Peach Soda">Peach Soda</option>
+                        <option value="Green Milk Tea">Green Milk Tea</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="discountPercentage">Discount Percentage (%)</label>
+                    <input type="number" id="discountPercentage" name="discountPercentage" class="form-control" min="0" max="100" step="0.01" placeholder="Enter percentage" required>
+                </div>
+                <div id="errorMessage" class="error-message">Please select a product and enter a valid discount percentage.</div>
+                <button type="button" id="addDiscountBtn" class="btn btn-primary">Add Discount</button>
+            </form>
+        </div>
+
+        <!-- Discount List -->
+        <h4>Current Discounts</h4>
+        <div id="discountList">No discounts available.</div>
+    </div>
+
+    <script>
+        // Load discounts
+        function loadDiscounts() {
+            console.log('Fetching discounts...');
+            fetch('http://localhost:3000/api/discounts')
+                .then(response => {
+                    if (!response.ok) throw new Error('Failed to fetch discounts: ' + response.status);
+                    return response.json();
+                })
+                .then(discounts => {
+                    console.log('Discounts received:', discounts);
+                    const list = document.getElementById('discountList');
+                    list.innerHTML = '';
+                    if (!discounts || discounts.length === 0) {
+                        list.innerHTML = '<div>No discounts available.</div>';
+                    } else {
+                        discounts.forEach(d => {
+                            const div = document.createElement('div');
+                            div.className = 'discount-item';
+                            div.innerHTML = `
+                                ${d.product_title}: ${d.discount_percentage}% 
+                                <button class="btn btn-danger btn-sm" onclick="deleteDiscount(${d.id})">Delete</button>
+                            `;
+                            list.appendChild(div);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching discounts:', error);
+                    document.getElementById('discountList').innerHTML = '<div>Error loading discounts.</div>';
+                });
+        }
+
+        // Add discount
+        function addDiscount() {
+            const productTitle = document.getElementById('productTitle').value;
+            const discountPercentage = document.getElementById('discountPercentage').value;
+
+            console.log('Form values:', { productTitle, discountPercentage });
+
+            if (!productTitle || !discountPercentage || isNaN(discountPercentage) || discountPercentage < 0 || discountPercentage > 100) {
+                console.log('Validation failed:', { productTitle, discountPercentage });
+                document.getElementById('errorMessage').style.display = 'block';
+                return;
+            }
+
+            const payload = {
+                product_title: productTitle,
+                discount_percentage: parseFloat(discountPercentage)
+            };
+            console.log('Sending payload:', payload);
+
+            fetch('http://localhost:3000/api/discounts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('Failed to add discount: ' + response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Discount added:', data);
+                    loadDiscounts();
+                    document.getElementById('productTitle').value = '';
+                    document.getElementById('discountPercentage').value = '';
+                    document.getElementById('errorMessage').style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Error adding discount:', error);
+                    document.getElementById('errorMessage').textContent = 'Failed to add discount: ' + error.message;
+                    document.getElementById('errorMessage').style.display = 'block';
+                });
+        }
+
+        // Delete discount
+        function deleteDiscount(id) {
+            console.log('Deleting discount ID:', id);
+            fetch(`http://localhost:3000/api/discounts/${id}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('Failed to delete discount: ' + response.status);
+                    console.log('Discount deleted:', id);
+                    loadDiscounts();
+                })
+                .catch(error => {
+                    console.error('Error deleting discount:', error);
+                });
+        }
+
+        // Bind button click
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Document ready');
+            loadDiscounts();
+
+            document.getElementById('addDiscountBtn').addEventListener('click', function() {
+                console.log('Add Discount button clicked');
+                addDiscount();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+.profile {
+  margin: 20px auto;
+  padding: 20px;
+  background-color: rgb(242, 236, 226);
+  width: 60%;
+}
+.label_type {
+  font-size: 18px;
+  padding: 5px;
+}
+.divider {
+  border-bottom: 3px solid purple;
+  margin: 10px;
+}
+h3,
+.bottom h3 {
+  margin: 10px;
+}
+input {
+  background-color: white;
+  width: 360px;
+  height: 25px;
+  padding: 5px;
+}
+
+.top {
+  display: flex; /*parallel */
+  gap: 25px;
+  justify-content: center;
+  align-items: center;
+}
+.top input {
+  margin-top: 0px;
+  height: 30px;
+}
+
+.top-right {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.bio input {
+  margin-top: 3px;
+  height: 30px;
+}
+
+.mid1 {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  align-items: center;
+}
+.mid1 input {
+  width: 273px;
+}
+
+.left-column input {
+  height: 30px;
+}
+
+.right-column textarea {
+  border: 2px solid black;
+  height: 250px;
+}
+
+.mid2 {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  align-items: center;
+}
+.mid2 input {
+  width: 300px;
+  height: 30px;
+}
+
+.bottom textarea {
+  margin: 0px 10px 0px;
+  width: 95%;
+  border: 2px solid black;
+}
+
+.submit {
+  text-align: center;
+  height: 10vh;
+}
+
+.submit input[type="submit"] {
+  background-color: #f8842b;
+  border-radius: 10px;
+  height: 40px;
+}
+
+.submit input[type="submit"]:hover {
+  background-color: #bbb;
+}
