@@ -13,7 +13,7 @@ Welcome to **MiZ2u Cafe**, a web app that brings a cozy coffee shop to life! Thi
 ## Project Structure
 
 ```
-miz2u-cafe/
+BIT102_project/
 ├── public/
 │   ├── css/
 │   │   ├── cardbox.css
@@ -60,7 +60,7 @@ Follow these steps to get MiZ2u Cafe running on your machine. I’ve made it as 
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/ptreni-gr/BIT102_project.git
-cd miz2u-cafe
+cd BIT102_project
 ```
 
 ### 2. Install Node.js Dependencies
@@ -79,7 +79,7 @@ If `package.json` doesn’t exist, create it with:
 
 ```json
 {
-  "name": "miz2u-cafe",
+  "name": "BIT102_project",
   "version": "1.0.0",
   "description": "A web app for MiZ2u Cafe with discount management",
   "main": "server.js",
