@@ -116,6 +116,7 @@ Then run `npm install` again.
    CREATE TABLE discounts (
        id INT AUTO_INCREMENT PRIMARY KEY,
        product_title VARCHAR(255) NOT NULL,
+       UNIQUE (product_title),
        discount_percentage DECIMAL(5,2) NOT NULL,
        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
    );
@@ -131,7 +132,7 @@ Then run `npm install` again.
    | Field               | Type             | Null | Key | Default           |
    +---------------------+------------------+------+-----+-------------------+
    | id                  | int(11)          | NO   | PRI | NULL              |
-   | product_title       | varchar(255)     | NO   |     | NULL              |
+   | product_title       | varchar(255)     | NO   | UNI | NULL              |
    | discount_percentage | decimal(5,2)     | NO   |     | NULL              |
    | created_at          | timestamp        | YES  |     | CURRENT_TIMESTAMP |
    +---------------------+------------------+------+-----+-------------------+
